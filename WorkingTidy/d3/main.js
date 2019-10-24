@@ -20,7 +20,7 @@ export default function define(runtime, observer) {
   });
 
   const svg = d3.create("svg")
-      .attr("viewBox", [-margin.left, -margin.top, width, dx])
+      .attr("viewBox", [-margin.left, -margin.top, 100, 100])
       .style("font", "10px sans-serif")
       .style("user-select", "none");
 
@@ -73,7 +73,31 @@ export default function define(runtime, observer) {
     nodeEnter.append("circle")
         .attr("r", 2.5)
         .attr("fill", d => d._children ? "#555" : "#999")
-        .attr("stroke-width", 10);
+        .attr("r", function (d) { return d.data.size * 2.5; })
+        .style("stroke", function (d) {
+          if (d.data.size < 0.6) {
+            return "black"
+          }
+          else if (d.data.size < 0.8) {
+            return "purple"
+          }
+          else if (d.data.size < 1.0) {
+            return "blue"
+          }
+          else if (d.data.size < 1.2) {
+            return "green"
+          }
+          else if (d.data.size < 1.4) {
+            return "yellow"
+          }
+          else if (d.data.size < 1.6) {
+            return "orange"
+          }
+          else {
+            return "red"
+          }
+        })
+        .attr("stroke-width", 1.5);
 
         // this will size the nodes by value
         /* 
@@ -82,7 +106,29 @@ export default function define(runtime, observer) {
 
         // this will color the border of the nodes by value
         /*
-        .style("stroke", "red")
+        .style("stroke", function (d) {
+          if (d.data.size < 0.6) {
+            return "black"
+          }
+          else if (d.data.size < 0.8) {
+            return "purple"
+          }
+          else if (d.data.size < 1.0) {
+            return "blue"
+          }
+          else if (d.data.size < 1.2) {
+            return "green"
+          }
+          else if (d.data.size < 1.4) {
+            return "yellow"
+          }
+          else if (d.data.size < 1.6) {
+            return "orange"
+          }
+          else {
+            return "red"
+          }
+        })
         */
 
     nodeEnter.append("text")
@@ -165,7 +211,7 @@ d3.json("https://raw.githubusercontent.com/bkellman/WeightedImageTidyTree/master
 width / 6
 )});
   main.variable(observer("margin")).define("margin", function(){return(
-{top: 10, right: 120, bottom: 10, left: 40}
+{top: 100, right: 120, bottom: 10, left: 80}
 )});
   main.variable(observer("d3")).define("d3", ["require"], function(require){return(
 require("d3@5")
