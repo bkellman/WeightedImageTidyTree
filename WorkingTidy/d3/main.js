@@ -35,15 +35,26 @@ export default function define(runtime, observer) {
   
   const node = g.append("g")
       .attr("stroke-linejoin", "round")
-      .attr("stroke-width", 3)
-    .selectAll("g")
-    .data(root.descendants())
-    .join("g")
+      //controls the width of the border surrounging the nodes
+      .attr("stroke-width", 1)
+      .selectAll("g")
+      .data(root.descendants())
+      .join("g")
       .attr("transform", d => `translate(${d.y},${d.x})`);
 
   node.append("circle")
       .attr("fill", d => d.children ? "#555" : "#999")
-      .attr("r", 2.5);
+      .attr("r", 3.5);
+
+      // this will size the nodes by value
+      /* 
+      .attr("r", function (d) { return d.data.size * 2.5; })
+      */
+
+      // this will color the border of the nodes by value
+      /*
+      .style("stroke", "red")
+      */
 
   node.append("text")
       .attr("dy", "0.31em")
@@ -52,12 +63,21 @@ export default function define(runtime, observer) {
       .text(d => d.data.name)
     .clone(true).lower()
       .attr("stroke", "white");
+    
+  // node.append("image")
+  //     .attr("xlink:href", function (d) { return d.data.img; })
+  //     .attr("x", function (d) { return -6; })
+  //     .attr("y", function (d) { return -6; })
+  //     .attr("height", 12)
+  //     .attr("width", 12);
   
   return svg.node();
 }
 );
   main.variable(observer("data")).define("data", ["d3"], function(d3){return(
-    d3.json("https://gist.githubusercontent.com/TylerReaganUCSD/6f072c82cf29ce3d874b2e36a2486848/raw/cf8b0bda4e6418635bd4f8816d460a55042bd334/benTree.json")
+    //d3.json("https://gist.githubusercontent.com/TylerReaganUCSD/6f072c82cf29ce3d874b2e36a2486848/raw/cf8b0bda4e6418635bd4f8816d460a55042bd334/benTree.json")
+    //d3.json("https://gist.githubusercontent.com/TylerReaganUCSD/cc196475a316d308a91b88818ade41d0/raw/24536288add67217e0887c8f5cf042f31f5b1981/imageTest.json")
+    d3.json("https://raw.githubusercontent.com/bkellman/WeightedImageTidyTree/master/BenTree%20Converter/hierarchy.json")
 )});
   main.variable(observer("tree")).define("tree", ["d3","width"], function(d3,width){return(
 data => {
@@ -75,3 +95,17 @@ require("d3@5")
 )});
   return main;
 }
+
+
+/* THINGS THAT WERE REQUESTED
+1. a legend that toggles different attributes
+2. zoomable nodes
+  the current formatting script is assuming all nodes are a "root" rather than 
+  just parents so X1 -> X2 -> X3 is showing X1 and X2 as separate roots
+3. color the border of the nodes by a value
+4. size the nodes by a value
+5. color the edges by a value
+6. size the edges by a value
+7. toggled image reveal rather than static (show the immediate children
+  and parents) (a want)
+*/
