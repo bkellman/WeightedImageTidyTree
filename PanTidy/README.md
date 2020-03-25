@@ -1,0 +1,1 @@
+Running this code can be done through the terminal. After cloning the repo, cd into this folder and just run `python -m http.server` to start up a localhost Python server on the default port 8000. That should be all it takes to get it up and running. Just go to 'localhost:8000' in any browser to see the tree.
